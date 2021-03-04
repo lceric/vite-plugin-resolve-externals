@@ -1,0 +1,25 @@
+{
+  "name": "vite-plugin-resolve-externals",
+  "version": "0.1.0",
+  "description": "vite plugin resolve externals",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lceric/vite-plugin-resolve-externals.git"
+  },
+  "keywords": [
+    "vite",
+    "plugin",
+    "resolve",
+    "externals"
+  ],
+  "author": "Eric Lee",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/lceric/vite-plugin-resolve-externals/issues"
+  },
+  "homepage": "https://github.com/lceric/vite-plugin-resolve-externals#readme"
+}
