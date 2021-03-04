@@ -1,4 +1,8 @@
 # vite-plugin-resolve-externals
+
+[![view on npm](http://img.shields.io/npm/v/vite-plugin-resolve-externals.svg)](https://www.npmjs.com/package/vite-plugin-resolve-externals)
+[![npm module downloads per month](http://img.shields.io/npm/dm/vite-plugin-resolve-externals.svg)](https://www.npmjs.org/package/vite-plugin-resolve-externals)
+
 vite plugin resolve externals
 
 ## usage
@@ -7,6 +11,8 @@ vite plugin resolve externals
 npm i -D vite-plugin-resolve-externals
 ```
 **use**
+Support setting through parameter transfer, and also support configuring externals item in resolve
+
 ```js
 // vite.config.js
 const resolveExternalsPlugin = require('vite-plugin-resolve-externals');
@@ -16,6 +22,7 @@ const projectRootDir = path.resolve(__dirname);
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
+    // It can be configured here
     resolveExternalsPlugin({
       vue: 'Vue',
       vuex: 'Vuex',
@@ -30,6 +37,7 @@ export default defineConfig({
         replacement: path.resolve(projectRootDir, 'src'),
       },
     ],
+    // or here
     externals: {
       axios: 'axios',
     },
