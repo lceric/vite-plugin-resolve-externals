@@ -1,7 +1,7 @@
 /**
  * @type {import('.').ResolveExternals}
  */
- module.exports = function resolveExternals(externals = {}) {
+module.exports = function resolveExternals(externals = {}) {
   return {
     name: 'vite-plugin-resolve-externals',
     // It should be run before the vite builtin `vite:resolve`
@@ -13,6 +13,9 @@
       }
     },
     config(config) {
+      // Merge externals from `config.resolve`
+      Object.assign(externals, config.resolve.externals);
+
       if (!config.optimizeDeps) config.optimizeDeps = {};
       if (!config.optimizeDeps.exclude) config.optimizeDeps.exclude = [];
 
@@ -23,9 +26,6 @@
       }
       // Avoid vite Pre-building
       config.optimizeDeps.exclude.push(...exclude);
-
-      // Merge externals from `config.resolve`
-      Object.assign(externals, config.resolve.externals);
     },
     load(id) {
       const fnOrIife = externals[id];
@@ -37,4 +37,3 @@
     },
   };
 };
- 
