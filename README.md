@@ -27,7 +27,14 @@ export default defineConfig({
       vue: 'Vue',
       vuex: 'Vuex',
       'vue-router': 'VueRouter',
-      'element-ui': 'ELEMENT',
+      'element-ui': () => `
+        const E = window.ELEMENT;
+        export default E;
+        export const Message = E.Message;
+        export const MessageBox = E.MessageBox;
+        export const Notification = E.Notification;
+      `,
+      // ...other element-ui members
     }),
   ],
   resolve: {
@@ -47,6 +54,6 @@ export default defineConfig({
 **src**
 ```js
 import Vue from 'vue'
-import ELementUI from 'element-ui'
+import ELementUI, { Message, MessageBox, Notification } from 'element-ui'
 import axios from 'axios'
 ```
