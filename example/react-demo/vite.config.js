@@ -12,7 +12,13 @@ export default defineConfig({
     resolveExternalsPlugin({
       react: 'React',
       // Return custom resolve-externals code by function
-      'react-dom': () => `const React = window.ReactDOM; export { React as default }`,
+      'react-dom': () =>
+        `const React = window.ReactDOM; export { React as default }`,
+      antd: () => `
+        const antd = window.antd;
+        export { antd as default };
+        export const Button = antd.Button
+      `,
     }),
   ],
   resolve: {
