@@ -1,6 +1,6 @@
 {
   "name": "vite-plugin-resolve-externals",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "vite plugin resolve externals",
   "main": "src/index.js",
   "scripts": {
