@@ -6,6 +6,7 @@ module.exports = function resolveExternals(externals = {}) {
   return [
     {
       name: `${name}:resolveId`,
+      enforce: 'pre',
       resolveId(id) {
         if (externals[id]) {
           // Avoid vite builtin `vite:resolve` plugin
