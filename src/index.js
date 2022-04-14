@@ -1,34 +1,40 @@
 /**
  * @type {import('.').ResolveExternals}
  */
-module.exports = function resolveExternals(externals = {}) {
-  const name = 'vite-plugin-resolve-externals';
-  return [
-    {
-      name: `${name}:resolveId`,
-      enforce: 'pre',
-      resolveId(id) {
-        if (externals[id]) {
-          // Avoid vite builtin `vite:resolve` plugin
-          return id;
-        }
-      },
+ module.exports = function resolveExternals(externals = {}) {
+  return {
+    name: 'vite-plugin-resolve-externals',
+    // It should be run before the vite builtin `vite:resolve`
+    enforce: 'pre',
+    resolveId(id) {
+      if (externals[id]) {
+        // Avoid vite builtin `vite:resolve` plugin
+        return id;
+      }
     },
-    {
-      name,
-      config(config) {
-        const { resolve } = config;
-        Object.assign(externals, resolve.externals);
-        return config;
-      },
-      load(id) {
-        const fnOrIife = externals[id];
-        if (!fnOrIife) return null;
+    config(config) {
+      if (!config.optimizeDeps) config.optimizeDeps = {};
+      if (!config.optimizeDeps.exclude) config.optimizeDeps.exclude = [];
 
-        return typeof fnOrIife === 'function'
-          ? fnOrIife(id)
-          : `const M = window['${fnOrIife}']; export default M`;
-      },
+      let exclude = Object.keys(externals);
+      if (config.optimizeDeps.include) {
+        // If the user force the module to be Pre-building, we should filter out it
+        exclude = keys.filter(key => !config.optimizeDeps.include.includes(key));
+      }
+      // Avoid vite Pre-building
+      config.optimizeDeps.exclude.push(...exclude);
+
+      // Merge externals from `config.resolve`
+      Object.assign(externals, config.resolve.externals);
     },
-  ];
-}
+    load(id) {
+      const fnOrIife = externals[id];
+      if (!fnOrIife) return null;
+
+      return typeof fnOrIife === 'function'
+        ? fnOrIife(id)
+        : `const M = window['${fnOrIife}']; export default M`;
+    },
+  };
+};
+ 
