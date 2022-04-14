@@ -1,26 +1,34 @@
 /**
- * vite resolve-externals
+ * @type {import('.').ResolveExternals}
  */
-function resolveExternals(externals = {}) {
-  return {
-    name: 'vite-plugin-resolve-externals',
-    config(config) {
-      const { resolve } = config;
-      Object.assign(externals, resolve.externals);
-      return config;
+module.exports = function resolveExternals(externals = {}) {
+  const name = 'vite-plugin-resolve-externals';
+  return [
+    {
+      name: `${name}:resolveId`,
+      enforce: 'pre',
+      resolveId(id) {
+        if (externals[id]) {
+          // Avoid vite builtin `vite:resolve` plugin
+          return id;
+        }
+      },
     },
-    resolveId(id) {
-      if (externals[id]) {
-        return id;
-      }
-    },
-    load(id) {
-      if (externals[id]) {
-        return `const externals = window.${externals[id]};
-        export default externals`;
-      }
-    },
-  };
-}
+    {
+      name,
+      config(config) {
+        const { resolve } = config;
+        Object.assign(externals, resolve.externals);
+        return config;
+      },
+      load(id) {
+        const fnOrIife = externals[id];
+        if (!fnOrIife) return null;
 
-module.exports = resolveExternals
+        return typeof fnOrIife === 'function'
+          ? fnOrIife(id)
+          : `const M = window['${fnOrIife}']; export default M`;
+      },
+    },
+  ];
+}

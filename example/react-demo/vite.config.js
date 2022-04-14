@@ -1,7 +1,7 @@
 const path = require('path')
 const { defineConfig } = require('vite')
 const reactRefresh = require('@vitejs/plugin-react-refresh')
-const resolveExternalsPlugin = require('vite-plugin-resolve-externals')
+const resolveExternalsPlugin = require('../..')
 const projectRootDir = path.resolve(__dirname)
 
 // https://vitejs.dev/config/
@@ -11,7 +11,8 @@ export default defineConfig({
     reactRefresh(),
     resolveExternalsPlugin({
       react: 'React',
-      'react-dom': 'ReactDOM',
+      // Return custom resolve-externals code by function
+      'react-dom': () => `const React = window.ReactDOM; export { React as default }`,
     }),
   ],
   resolve: {
