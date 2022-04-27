@@ -22,7 +22,7 @@ module.exports = function resolveExternals(externals = {}) {
       let exclude = Object.keys(externals);
       if (config.optimizeDeps.include) {
         // If the user force the module to be Pre-building, we should filter out it
-        exclude = keys.filter(key => !config.optimizeDeps.include.includes(key));
+        exclude = exclude.filter(key => !config.optimizeDeps.include.includes(key));
       }
       // Avoid vite Pre-building
       config.optimizeDeps.exclude.push(...exclude);
